@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model sysdiagrams {
+  name         String @db.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B618B8234C3") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
+}
+
+model tasks {
+  id             Int       @id(map: "PK__tasks__3213E83F8B6C4488") @default(autoincrement())
+  title          String?   @db.NVarChar(255)
+  description    String?   @db.NVarChar(Max)
+  complete       Boolean?  @default(false, map: "DF__tasks__complete__628FA481")
+  creationDate   DateTime? @default(now(), map: "DF__tasks__creationD__6383C8BA") @db.DateTime
+  completionDate DateTime? @db.Date
+  userId         Int?
+  users          users?    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__tasks__userId__6477ECF3")
+}
+
+model users {
+  id           Int       @id(map: "PK__users__3213E83FD4318CA9") @default(autoincrement())
+  firstName    String?   @db.NVarChar(255)
+  lastName     String?   @db.NVarChar(255)
+  email        String?   @db.NVarChar(Max)
+  password     String?   @db.NVarChar(255)
+  creationDate DateTime? @default(now(), map: "DF__users__creationD__5535A963") @db.DateTime
+  tasks        tasks[]
+}
