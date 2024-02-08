@@ -17,23 +17,23 @@ model sysdiagrams {
   @@unique([principal_id, name], map: "UK_principal_name")
 }
 
-model tasks {
-  id             Int       @id(map: "PK__tasks__3213E83F8B6C4488") @default(autoincrement())
-  title          String?   @db.NVarChar(255)
+model Task {
+  id             Int       @id(map: "PK__Task__3213E83F14B93BD4") @default(autoincrement())
+  title          String    @db.NVarChar(255)
   description    String?   @db.NVarChar(Max)
-  complete       Boolean?  @default(false, map: "DF__tasks__complete__628FA481")
-  creationDate   DateTime? @default(now(), map: "DF__tasks__creationD__6383C8BA") @db.DateTime
+  complete       Boolean   @default(false, map: "DF__Task__complete__74AE54BC")
+  creationDate   DateTime  @default(now(), map: "DF__Task__creationDa__75A278F5") @db.DateTime
   completionDate DateTime? @db.Date
-  userId         Int?
-  users          users?    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__tasks__userId__6477ECF3")
+  userId         Int
+  User           User      @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "FK__Task__userId__6C190EBB")
 }
 
-model users {
-  id           Int       @id(map: "PK__users__3213E83FD4318CA9") @default(autoincrement())
-  firstName    String?   @db.NVarChar(255)
-  lastName     String?   @db.NVarChar(255)
-  email        String?   @db.NVarChar(Max)
-  password     String?   @db.NVarChar(255)
-  creationDate DateTime? @default(now(), map: "DF__users__creationD__5535A963") @db.DateTime
-  tasks        tasks[]
+model User {
+  id           Int      @id(map: "PK__User__3213E83F7E70EC3E") @default(autoincrement())
+  firstName    String   @db.NVarChar(255)
+  lastName     String   @db.NVarChar(255)
+  email        String   @db.NVarChar(Max)
+  password     String   @db.NVarChar(255)
+  creationDate DateTime @default(now(), map: "DF__User__creationDa__71D1E811") @db.DateTime
+  Task         Task[]
 }
