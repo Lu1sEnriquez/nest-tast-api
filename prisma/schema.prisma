@@ -35,5 +35,6 @@ model User {
   email        String   @db.NVarChar(Max)
   password     String   @db.NVarChar(255)
   creationDate DateTime @default(now(), map: "DF__User__creationDa__71D1E811") @db.DateTime
+  role         String   @db.NVarChar(255) @default("user")
   Task         Task[]
 }

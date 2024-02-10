@@ -1,42 +1,50 @@
 import { Injectable } from '@nestjs/common';
 import { Task } from '@prisma/client';
+import { UserActiveInterface } from 'src/common/interface/user-active.interface';
 import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class TaskService {
   constructor(private db: DatabaseService) {}
 
-  getAllTask(): Promise<Task[]> {
-    return this.db.task.findMany();
+  findAll(user: UserActiveInterface): Promise<Task[]> {
+    return this.db.task.findMany({
+      where: {
+        userId: user.id,
+      },
+    });
   }
 
-  getTaskById(id: number): Promise<Task> {
+  getById(id: number, user: UserActiveInterface): Promise<Task> {
     return this.db.task.findUnique({
       where: {
         id: id,
+        userId: user.id,
       },
     });
   }
 
-  createTask(data: Task): Promise<Task> {
+  create(data: Task, user: UserActiveInterface): Promise<Task> {
     return this.db.task.create({
-      data,
+      data: { ...data, userId: user.id },
     });
   }
 
-  updateTask(id: number, data: Task): Promise<Task> {
+  update(id: number, data: Task, user: UserActiveInterface): Promise<Task> {
     return this.db.task.update({
       where: {
         id: id,
+        userId: user.id,
       },
       data,
     });
   }
 
-  deleteTask(id: number): Promise<Task> {
+  delete(id: number, user: UserActiveInterface): Promise<Task> {
     return this.db.task.delete({
       where: {
         id: id,
+        userId: user.id,
       },
     });
   }

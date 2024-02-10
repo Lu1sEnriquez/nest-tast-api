@@ -4,7 +4,7 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { Role } from '../common/enums/rol.enum';
 import { Auth } from './decorators/auth.decorator';
-import { ActiveUser } from 'src/common/decorators/active-user.decorator';
+import { UserActive } from 'src/common/decorators/user-active.decorator';
 import { UserActiveInterface } from 'src/common/interface/user-active.interface';
 
 @Controller('auth')
@@ -23,7 +23,7 @@ export class AuthController {
 
   @Get('profile')
   @Auth(Role.ADMIN)
-  profile(@ActiveUser() user: UserActiveInterface) {
+  profile(@UserActive() user: UserActiveInterface) {
     return this.authService.profile(user);
   }
 }
